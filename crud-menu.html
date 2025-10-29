@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRUD Menu - Rize Coffee</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <h1>Manajemen Menu</h1>
+    <nav class="navbar">
+        <a href="dashboard.html">🏠 Kasir</a>
+        <a href="crud-menu.html">🍽 Menu</a>
+        <a href="crud-admin.html">👤 Admin</a>
+        <a href="laporan-income.html">💰 Laporan</a>
+        <a href="riwayat-transaksi.html">🧾 Riwayat</a>
+        <a href="log-aktivitas.html">🧠 Log</a>
+      </nav>
+  </header>
+
+  <main class="crud-container">
+    <section class="form-section">
+      <h2>Tambah / Edit Menu</h2>
+      <form id="menuForm">
+        <input type="hidden" id="editIndex">
+        <label>Nama Menu</label>
+        <input type="text" id="namaMenu" required>
+
+        <label>Harga (Rp)</label>
+        <input type="number" id="hargaMenu" required>
+
+        <label>Kategori</label>
+        <select id="kategoriMenu">
+          <option>Minuman</option>
+          <option>Makanan</option>
+        </select>
+
+        <label>Stok</label>
+        <input type="number" id="stokMenu" required>
+
+        <button type="submit" class="btn-primary">Simpan</button>
+      </form>
+    </section>
+
+    <section class="table-section">
+      <h2>Daftar Menu</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Nama</th>
+            <th>Harga</th>
+            <th>Kategori</th>
+            <th>Stok</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="menuTable"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    let dataMenu = [
+      { nama: "Kopi Hitam", harga: 15000, kategori: "Minuman", stok: 20 },
+      { nama: "Croissant", harga: 18000, kategori: "Makanan", stok: 10 }
+    ];
+
+    const menuTable = document.getElementById("menuTable");
+    const form = document.getElementById("menuForm");
+
+    function renderMenu() {
+      menuTable.innerHTML = "";
+      dataMenu.forEach((m, i) => {
+        menuTable.innerHTML += `
+          <tr>
+            <td>${i+1}</td>
+            <td>${m.nama}</td>
+            <td>Rp${m.harga.toLocaleString()}</td>
+            <td>${m.kategori}</td>
+            <td>${m.stok}</td>
+            <td>
+              <button onclick="editMenu(${i})" class="btn-primary">Edit</button>
+              <button onclick="hapusMenu(${i})" class="btn-secondary">Hapus</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function editMenu(i) {
+      const m = dataMenu[i];
+      document.getElementById("editIndex").value = i;
+      document.getElementById("namaMenu").value = m.nama;
+      document.getElementById("hargaMenu").value = m.harga;
+      document.getElementById("kategoriMenu").value = m.kategori;
+      document.getElementById("stokMenu").value = m.stok;
+    }
+
+    function hapusMenu(i) {
+      if (confirm("Hapus menu ini?")) {
+        dataMenu.splice(i, 1);
+        renderMenu();
+      }
+    }
+
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      const idx = document.getElementById("editIndex").value;
+      const data = {
+        nama: document.getElementById("namaMenu").value,
+        harga: parseInt(document.getElementById("hargaMenu").value),
+        kategori: document.getElementById("kategoriMenu").value,
+        stok: parseInt(document.getElementById("stokMenu").value),
+      };
+
+      if (idx === "") dataMenu.push(data);
+      else dataMenu[idx] = data;
+
+      form.reset();
+      document.getElementById("editIndex").value = "";
+      renderMenu();
+    });
+
+    renderMenu();
+  </script>
+</body>
+</html>

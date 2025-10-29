@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log Aktivitas - Rize Coffee</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <h1>Log Aktivitas Admin</h1>
+    <nav class="navbar">
+        <a href="dashboard.html">🏠 Kasir</a>
+        <a href="crud-menu.html">🍽 Menu</a>
+        <a href="crud-admin.html">👤 Admin</a>
+        <a href="laporan-income.html">💰 Laporan</a>
+        <a href="riwayat-transaksi.html">🧾 Riwayat</a>
+        <a href="log-aktivitas.html">🧠 Log</a>
+      </nav>
+  </header>
+
+  <main class="table-section">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Waktu</th>
+          <th>Admin</th>
+          <th>Aksi</th>
+          <th>Keterangan</th>
+        </tr>
+      </thead>
+      <tbody id="logTable"></tbody>
+    </table>
+  </main>
+
+  <script>
+    const logData = [
+      {waktu:"2025-10-24 10:22", admin:"Raihan", aksi:"Tambah Menu", ket:"Tambah 'Kopi ABC'"},
+      {waktu:"2025-10-24 11:02", admin:"Ruri", aksi:"Login", ket:"Login ke sistem"},
+      {waktu:"2025-10-24 12:10", admin:"Raihan", aksi:"Transaksi", ket:"TRX #0003 Rp205.000"},
+    ];
+
+    const logTable = document.getElementById("logTable");
+    logData.forEach((l, i) => {
+      logTable.innerHTML += `
+      <tr>
+        <td>${i+1}</td>
+        <td>${l.waktu}</td>
+        <td>${l.admin}</td>
+        <td>${l.aksi}</td>
+        <td>${l.ket}</td>
+      </tr>`;
+    });
+  </script>
+</body>
+</html>

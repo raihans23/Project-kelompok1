@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Riwayat Transaksi - Rize Coffee</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <h1>Riwayat Transaksi</h1>
+    <nav class="navbar">
+        <a href="dashboard.html">🏠 Kasir</a>
+        <a href="crud-menu.html">🍽 Menu</a>
+        <a href="crud-admin.html">👤 Admin</a>
+        <a href="laporan-income.html">💰 Laporan</a>
+        <a href="riwayat-transaksi.html">🧾 Riwayat</a>
+        <a href="log-aktivitas.html">🧠 Log</a>
+      </nav>
+  </header>
+
+  <main class="table-section">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Tanggal</th>
+          <th>Nomor</th>
+          <th>Kasir</th>
+          <th>Total</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody id="riwayatTable"></tbody>
+    </table>
+  </main>
+
+  <script>
+    const riwayat = [
+      {tanggal:"2025-10-23", nomor:"#0001", kasir:"Raihan", total:152000},
+      {tanggal:"2025-10-23", nomor:"#0002", kasir:"Ruri", total:98000},
+      {tanggal:"2025-10-24", nomor:"#0003", kasir:"Raihan", total:205000},
+    ];
+
+    const tbody = document.getElementById("riwayatTable");
+
+    riwayat.forEach((r, i)=>{
+      tbody.innerHTML += `
+      <tr>
+        <td>${i+1}</td>
+        <td>${r.tanggal}</td>
+        <td>${r.nomor}</td>
+        <td>${r.kasir}</td>
+        <td>Rp${r.total.toLocaleString()}</td>
+        <td><button onclick="cetak('${r.nomor}')" class="btn-primary">Cetak</button></td>
+      </tr>`;
+    });
+
+    function cetak(nomor){
+      alert("Mencetak struk transaksi " + nomor);
+      window.print();
+    }
+  </script>
+</body>
+</html>

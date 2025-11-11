@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kasir</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <h1>Kasir</h1>
+    <nav class="navbar">
+        <a href="dashboard.html">🏠 Kasir</a>
+        <a href="crud-menu.html">🍽 Menu</a>
+        <a href="crud-admin.html">👤 Admin</a>
+        <a href="laporan-income.html">💰 Laporan</a>
+        <a href="riwayat-transaksi.html">🧾 Riwayat</a>
+        <a href="log-aktivitas.html">🧠 Log</a>
+      </nav>
+      
+  </header>
+  
+
+  <main class="kasir-container">
+    <!-- Kiri: Daftar Produk -->
+    <section class="produk-section">
+      <div class="search-filter">
+        <input type="text" id="search" placeholder="Cari menu...">
+        <div class="filter-btns">
+          <button class="filter-btn active" data-category="all">Semua</button>
+          <button class="filter-btn" data-category="Minuman">Minuman</button>
+          <button class="filter-btn" data-category="Makanan">Makanan</button>
+        </div>
+      </div>
+      <div id="produk-list" class="produk-list"></div>
+    </section>
+
+    <!-- Kanan: Keranjang -->
+    <section class="keranjang-section">
+      <div class="info-kasir">
+        <p><strong>Nama Kasir:</strong> Raihan</p>
+        <p><strong>No. Transaksi:</strong> <span id="no-transaksi"></span></p>
+      </div>
+
+      <h2>Keranjang</h2>
+      <ul id="keranjang-list" class="keranjang-list"></ul>
+
+      <div class="total-box">
+        <p>Total: <span id="total-harga">Rp0</span></p>
+        <button id="proses-btn" class="btn-primary">Proses</button>
+        <button id="batal-btn" class="btn-secondary">Batal</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // === Data Produk ===
+    const produkData = [
+      {id:1, imgsrc:"kopi.png", nama:"Kopi Hitam", harga:15000, stok:20, terjual:40, kategori:"Minuman"},
+      {id:2, nama:"Latte Caramel", harga:25000, stok:10, terjual:12, kategori:"Minuman"},
+      {id:3, nama:"Cappuccino", harga:22000, stok:15, terjual:8, kategori:"Minuman"},
+      {id:4, nama:"Croissant", harga:18000, stok:12, terjual:5, kategori:"Makanan"},
+      {id:5, nama:"Roti Coklat", harga:12000, stok:10, terjual:9, kategori:"Makanan"},
+    ];
+
+    const produkList = document.getElementById("produk-list");
+    const keranjangList = document.getElementById("keranjang-list");
+    const totalHarga = document.getElementById("total-harga");
+    const noTransaksi = document.getElementById("no-transaksi");
+
+    let keranjang = [];
+    let kategoriAktif = "all";
+    noTransaksi.textContent = "TRX" + Date.now().toString().slice(-6);
+
+    // === Render Produk ===
+    function renderProduk() {
+      produkList.innerHTML = "";
+      const searchVal = document.getElementById("search").value.toLowerCase();
+
+      produkData
+        .filter(p =>
+          (kategoriAktif === "all" || p.kategori === kategoriAktif) &&
+          p.nama.toLowerCase().includes(searchVal)
+        )
+        .forEach(p => {
+          const card = document.createElement("div");
+          card.className = "produk-card";
+          card.innerHTML = `
+            <h3>${p.nama}</h3>
+            <p class="harga">Rp${p.harga.toLocaleString()}</p>
+            <p class="stok">Stock ${p.stok} | Sold ${p.terjual} | ${p.kategori}</p>
+            <button onclick="tambahKeKeranjang(${p.id})" class="btn-primary">+ Tambah</button>
+          `;
+          produkList.appendChild(card);
+        });
+    }
+
+    // === Tambah ke Keranjang ===
+    function tambahKeKeranjang(id) {
+      const produk = produkData.find(p => p.id === id);
+      const item = keranjang.find(i => i.id === id);
+
+      if (produk.stok <= 0) return alert("Stok habis!");
+
+      if (item) item.jumlah++;
+      else keranjang.push({...produk, jumlah:1});
+
+      produk.stok--;
+      renderProduk();
+      renderKeranjang();
+    }
+
+    // === Render Keranjang ===
+    function renderKeranjang() {
+      keranjangList.innerHTML = "";
+      let total = 0;
+
+      keranjang.forEach(item => {
+        total += item.harga * item.jumlah;
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <span>${item.nama} (${item.jumlah})</span>
+          <div>
+            <button onclick="ubahJumlah(${item.id}, -1)">-</button>
+            <button onclick="ubahJumlah(${item.id}, 1)">+</button>
+          </div>
+          <span>Rp${(item.harga * item.jumlah).toLocaleString()}</span>
+        `;
+        keranjangList.appendChild(li);
+      });
+
+      totalHarga.textContent = "Rp" + total.toLocaleString();
+    }
+
+    function ubahJumlah(id, delta) {
+      const item = keranjang.find(i => i.id === id);
+      const produk = produkData.find(p => p.id === id);
+      if (!item) return;
+
+      if (delta === 1 && produk.stok > 0) {
+        item.jumlah++;
+        produk.stok--;
+      } else if (delta === -1 && item.jumlah > 0) {
+        item.jumlah--;
+        produk.stok++;
+      }
+
+      if (item.jumlah === 0) keranjang = keranjang.filter(i => i.id !== id);
+      renderProduk();
+      renderKeranjang();
+    }
+
+    // === Filter dan Pencarian ===
+    document.getElementById("search").addEventListener("input", renderProduk);
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        kategoriAktif = btn.dataset.category;
+        renderProduk();
+      });
+    });
+
+    // === Tombol Proses dan Batal ===
+    document.getElementById("proses-btn").addEventListener("click", () => {
+      if (keranjang.length === 0) return alert("Keranjang kosong!");
+      alert("Transaksi berhasil diproses ✅");
+      keranjang = [];
+      renderKeranjang();
+    });
+
+    document.getElementById("batal-btn").addEventListener("click", () => {
+      if (confirm("Batalkan transaksi?")) {
+        keranjang = [];
+        renderKeranjang();
+      }
+    });
+
+    renderProduk();
+  </script>
+</body>
+</html>

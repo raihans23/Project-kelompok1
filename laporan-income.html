@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laporan Pendapatan</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+  <h1>Laporan Income</h1>
+  <nav class="navbar">
+    
+    <a href="dashboard.html">🏠 Kasir</a>
+        <a href="crud-menu.html">🍽 Menu</a>
+        <a href="crud-admin.html">👤 Admin</a>
+        <a href="laporan-income.html">💰 Laporan</a>
+        <a href="riwayat-transaksi.html">🧾 Riwayat</a>
+        <a href="log-aktivitas.html">🧠 Log</a> 
+  </nav>
+</header>
+
+  <main class="laporan-container">
+    <section class="laporan-kiri">
+     
+      <div class="search-bar">
+        <input type="text" id="search" placeholder="Search nama">
+      </div>
+      <div class="mini-head">
+      <p>nama</p>
+      <p>harga</p>
+      <p>quantity</p>
+      <p>bayar</p>
+      <p>kembalian</p>
+      </div>
+      <div id="laporanList" class="laporan-list">
+        <!-- data laporan dimasukkan lewat JS -->
+      </div>
+    </section>
+
+    <section class="laporan-kanan">
+      <h3>Pendapatan hari ini</h3>
+      <h1 id="totalIncome">Rp0</h1>
+    </section>
+  </main>
+
+  <script>
+    const laporanData = [
+      { nama: "Luna", harga: 20000, qty: 7, pay: 20000, ret: 20000 },
+      { nama: "Raihan", harga: 20000, qty: 7, pay: 20000, ret: 20000 },
+      { nama: "Dzaifa", harga: 20000, qty: 7, pay: 20000, ret: 20000 },
+      { nama: "Vicky", harga: 20000, qty: 7, pay: 20000, ret: 20000 },
+      { nama: "Luna", harga: 20000, qty: 7, pay: 20000, ret: 20000 },
+    ];
+
+    const list = document.getElementById("laporanList");
+    const totalIncome = document.getElementById("totalIncome");
+
+    let total = 0;
+    laporanData.forEach(item => {
+      const div = document.createElement("div");
+      div.classList.add("laporan-item");
+      div.innerHTML = `
+        <span>${item.nama}</span>
+        <span class="harga">Rp${item.harga.toLocaleString()}</span>
+        <span class="qty">qty ${item.qty}</span>
+        <span class="pay">Pay ${item.pay}</span>
+        <span class="ret">Return ${item.ret}</span>
+      `;
+      list.appendChild(div);
+      total += item.harga;
+    });
+
+    totalIncome.textContent = `Rp${total.toLocaleString()}`;
+
+    document.getElementById("search").addEventListener("keyup", (e) => {
+      const val = e.target.value.toLowerCase();
+      document.querySelectorAll(".laporan-item").forEach(i => {
+        i.style.display = i.textContent.toLowerCase().includes(val) ? "flex" : "none";
+      });
+    });
+  </script>
+</body>
+</html>

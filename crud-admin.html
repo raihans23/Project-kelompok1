@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRUD Admin - Rize Coffee</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <h1>Manajemen Admin</h1>
+    <nav class="navbar">
+        <a href="dashboard.html">🏠 Kasir</a>
+        <a href="crud-menu.html">🍽 Menu</a>
+        <a href="crud-admin.html">👤 Admin</a>
+        <a href="laporan-income.html">💰 Laporan</a>
+        <a href="riwayat-transaksi.html">🧾 Riwayat</a>
+        <a href="log-aktivitas.html">🧠 Log</a>
+      </nav>
+  </header>
+
+  <main class="crud-container">
+    <section class="form-section">
+      <form id="adminForm">
+        <input type="hidden" id="editIndex">
+        <label>Nama Admin</label>
+        <input type="text" id="namaAdmin" required>
+
+        <label>Username</label>
+        <input type="text" id="username" required>
+
+        <label>Password</label>
+        <input type="password" id="password" required>
+
+        <button type="submit" class="btn-primary">Simpan</button>
+      </form>
+    </section>
+
+    <section class="table-section">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Nama</th>
+            <th>Username</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="adminTable"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    let dataAdmin = [
+      {nama:"Raihan", username:"raihan", password:"12345"},
+      {nama:"Ruri", username:"ruri", password:"admin"}
+    ];
+
+    const table = document.getElementById("adminTable");
+    const form = document.getElementById("adminForm");
+
+    function renderAdmin() {
+      table.innerHTML = "";
+      dataAdmin.forEach((a, i) => {
+        table.innerHTML += `
+          <tr>
+            <td>${i+1}</td>
+            <td>${a.nama}</td>
+            <td>${a.username}</td>
+            <td>
+              <button onclick="editAdmin(${i})" class="btn-primary">Edit</button>
+              <button onclick="hapusAdmin(${i})" class="btn-secondary">Hapus</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function editAdmin(i) {
+      const a = dataAdmin[i];
+      document.getElementById("editIndex").value = i;
+      document.getElementById("namaAdmin").value = a.nama;
+      document.getElementById("username").value = a.username;
+      document.getElementById("password").value = a.password;
+    }
+
+    function hapusAdmin(i) {
+      if (confirm("Hapus admin ini?")) {
+        dataAdmin.splice(i, 1);
+        renderAdmin();
+      }
+    }
+
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      const idx = document.getElementById("editIndex").value;
+      const data = {
+        nama: document.getElementById("namaAdmin").value,
+        username: document.getElementById("username").value,
+        password: document.getElementById("password").value,
+      };
+      if (idx === "") dataAdmin.push(data);
+      else dataAdmin[idx] = data;
+
+      form.reset();
+      document.getElementById("editIndex").value = "";
+      renderAdmin();
+    });
+
+    renderAdmin();
+  </script>
+</body>
+</html>

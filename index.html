@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kasir</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-left">
+      <a href="#" class="nav-item active">Cashier</a>
+      <a href="transaction.html" class="nav-item">Transaction and Table</a>
+    </div>
+    <div class="nav-right">
+      <span class="user">Dzai</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="menu-section">
+      <div class="menu-top">
+        <input type="text" id="search" placeholder="Search here..." class="search">
+        <select id="categoryFilter" class="filter">
+          <option value="all">Semua</option>
+          <option value="Minuman">Minuman</option>
+          <option value="Makanan">Makanan</option>
+        </select>
+        <select id="sortFilter" class="filter">
+          <option value="default">Favorit</option>
+          <option value="new">Terbaru</option>
+          <option value="priceAsc">Harga Termurah</option>
+          <option value="priceDesc">Harga Termahal</option>
+        </select>
+      </div>
+
+      <div id="menuGrid" class="menu-grid"></div>
+    </section>
+
+    <aside class="order-section">
+      <div class="order-header">
+        <h4>M Raihan</h4>
+        <p>Table in - 01</p>
+        <p class="order-id">#0000001</p>
+        <p id="currentDate" class="date"></p>
+      </div>
+
+      <div id="orderList" class="order-list"></div>
+
+      <div class="order-summary">
+        <p>Total <span id="total">Rp0</span></p>
+        <p>Diskon <span id="diskon">Rp0</span></p>
+        <p class="grand-total">Grand Total <span id="grandTotal">Rp0</span></p>
+      </div>
+
+      <div class="customer-input">
+        <label for="customerName">Nama Customer</label>
+        <input type="text" id="customerName" placeholder="Masukkan nama pelanggan...">
+      </div>
+
+      <div class="order-buttons">
+        <button class="pay" id="payBtn">Bayar</button>
+        <button class="cancel" id="cancelBtn">Batal</button>
+      </div>
+    </aside>
+  </main>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
